@@ -56,12 +56,14 @@ SUPPORT_EMAIL_ADDRESS=your-email@gmail.com
 ## Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/rushi-018/clover-backend.git
 cd clover-backend
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
@@ -69,6 +71,7 @@ npm install
 3. Create `.env` file with your configuration
 
 4. Start the server:
+
 ```bash
 npm start
 ```
@@ -94,6 +97,7 @@ npm start
 ### Environment Variables for Production
 
 Set these in your hosting platform:
+
 - All variables from `.env.example`
 - Update `MONGO_URI` with production database
 - Use strong `AUTH_SECRET` (32+ characters)

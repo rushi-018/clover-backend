@@ -14,10 +14,11 @@ let consumers = {};
 let consumersObjects = {};
 
 const init = async () => {
-  worker = await mediasoup.createWorker({
-    rtcMinPort: config.rtcMinPort,
-    rtcMaxPort: config.rtcMaxPort,
-    logLevel: config.mediasoupLogLevel,
+  try {
+    worker = await mediasoup.createWorker({
+      rtcMinPort: config.rtcMinPort,
+      rtcMaxPort: config.rtcMaxPort,
+      logLevel: config.mediasoupLogLevel,
   });
 
   worker.on('died', () => {
@@ -25,10 +26,17 @@ const init = async () => {
     setTimeout(() => process.exit(1), 2000);
   });
 
-  const mediaCodecs = config.mediaCodecs;
-  mediasoupRouter = await worker.createRouter({ mediaCodecs });
-  console.log('mediasoup worker running'.green);
-  console.log(`mediasoup ip is ${config.ipAddress.ip}`.green);
+    const mediaCodecs = config.mediaCodecs;
+    mediasoupRouter = await worker.createRouter({ mediaCodecs });
+    console.log('mediasoup worker running'.green);
+    console.log(`mediasoup ip is ${config.ipAddress.ip}`.green);
+  } catch (error) {
+    console.error('Failed to initialize mediasoup:', error.message);
+    console.log('Video conferencing will be disabled in production environment');
+    // Set worker to null so other functions can check if mediasoup is available
+    worker = null;
+    mediasoupRouter = null;
+  }
 };
 
 async function createWebRtcTransport() {
@@ -93,6 +101,12 @@ async function createConsumer(producer, rtpCapabilities, consumerTransport) {
 }
 
 const initSocket = (socket) => {
+  // Check if mediasoup is available
+  if (!worker || !mediasoupRouter) {
+    console.log('Mediasoup not available - video conferencing disabled');
+    return;
+  }
+
   socket.on('getRouterRtpCapabilities', (data, callback) => {
     callback(mediasoupRouter.rtpCapabilities);
   });
