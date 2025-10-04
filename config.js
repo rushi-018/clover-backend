@@ -4,10 +4,10 @@ const info = require('./version.json');
 module.exports = {
   appVersion: info.version,
   appBuild: info.build,
-  port: process.env.PORT || 4000,
-  secret: process.env.AUTH_SECRET || 'jwt-default-secret',
+  port: process.env.PORT || 8080,
+  secret: process.env.AUTH_SECRET || '346892079f62beac4dd9d98a41374953966e9fc9407a53ec52c09e8b1882e0fc',
   mongo: {
-    uri: process.env.MONGO_URI,
+    uri: process.env.MONGO_URI || 'mongodb+srv://rushirajsuwarnkar018:Mongodb_018@cluster0.imrcf.mongodb.net/rushiraj?retryWrites=true&w=majority&appName=Cluster0',
     srv: (process.env.MONGO_SRV || '').toString() === 'true',
     username: process.env.MONGO_USERNAME,
     password: process.env.MONGO_PASSWORD,
@@ -18,14 +18,14 @@ module.exports = {
   },
   dataFolder: './data',
   rootUser: {
-    username: process.env.ROOT_USER_USERNAME,
-    email: process.env.ROOT_USER_EMAIL,
-    password: process.env.ROOT_USER_PASSWORD,
-    firstName: process.env.ROOT_USER_FIRST_NAME,
-    lastName: process.env.ROOT_USER_LAST_NAME,
+    username: process.env.ROOT_USER_USERNAME || 'admin',
+    email: process.env.ROOT_USER_EMAIL || 'rushirajsuwarnkar018@gmail.com',
+    password: process.env.ROOT_USER_PASSWORD || 'Doraemon@018',
+    firstName: process.env.ROOT_USER_FIRST_NAME || 'Admin',
+    lastName: process.env.ROOT_USER_LAST_NAME || 'User',
   },
   ipAddress: {
-    ip: process.env.MAPPED_IP === 'true' ? '0.0.0.0' : process.env.PUBLIC_IP_ADDRESS,
+    ip: process.env.MAPPED_IP === 'true' ? '0.0.0.0' : (process.env.PUBLIC_IP_ADDRESS || '0.0.0.0'),
     announcedIp: process.env.MAPPED_IP === 'true' ? process.env.PUBLIC_IP_ADDRESS : null,
   },
 
