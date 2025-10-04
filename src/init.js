@@ -117,11 +117,20 @@ module.exports = () => {
     let connecting = setTimeout(() => console.log('Connecting to DB...'.yellow), 1000);
 
     const { mongo } = store.config;
-    const uri =
-      mongo.uri ||
-      `mongodb${mongo.srv ? '+srv' : ''}://${mongo.username}:${encodeURIComponent(mongo.password)}@${mongo.hostname}:${
+    let uri = mongo.uri;
+    
+    // If no URI is provided, try to construct it from individual components
+    if (!uri && mongo.username && mongo.password && mongo.hostname) {
+      uri = `mongodb${mongo.srv ? '+srv' : ''}://${mongo.username}:${encodeURIComponent(mongo.password)}@${mongo.hostname}:${
         mongo.port
       }/${mongo.database}?authSource=${mongo.authenticationDatabase}`;
+    }
+    
+    // Fallback to default connection string if nothing is configured
+    if (!uri) {
+      console.error('MongoDB connection not properly configured. Using fallback connection.');
+      uri = 'mongodb+srv://rushirajsuwarnkar018:Mongodb_018@cluster0.imrcf.mongodb.net/rushiraj?retryWrites=true&w=majority&appName=Cluster0';
+    }
 
     mongoose.set('strictQuery', false);
 
